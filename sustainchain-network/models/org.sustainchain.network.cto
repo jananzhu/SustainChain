@@ -35,7 +35,6 @@ participant Approver identified by approverId {
 asset ApprovableRequest identified by requestId {
   o String requestId
   --> Organization requestingOrg
-  --> Approver requestedApprover
   --> Approvable requestData
   o DateTime requestTime
 }
@@ -50,8 +49,16 @@ asset SustainMetrics extends Approvable{
   o EnergyMix energyMix
 }
 
+abstract asset Approvable identified by approvableId{
+  o String approvableId
+  --> Approver approver
+  --> Organization owner
+  o DateTime approveTime
+}
+
 transaction SubmitRequest {
   --> Approver requestApprover
+  --> Organization requestingOrg
   --> Approvable requestData
 }
 
@@ -60,12 +67,6 @@ transaction ApproveRequest {
   --> Organization owner
 }
 
-abstract asset Approvable identified by approvableId{
-  o String approvableId
-  --> Approver approver
-  --> Organization owner
-  o DateTime approveTime
-}
 
 /*
 * Should add up to 1
