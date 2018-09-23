@@ -1,0 +1,21 @@
+/** Queries for sustainability ledger business network
+*/
+query selectCertifications {
+  description: "Select all cerifications"
+  statement:
+    SELECT org.sustainchain.network.Certification
+}
+
+query selectCertificationsByOrganization{
+  description: "Select all certifications for an organization"
+  statement:
+    SELECT org.sustainchain.network.Certification
+      WHERE (owner == _$owner)
+}
+
+query selectCertificationsByType{
+  description: "Select all certifications based on their type"
+  statement:
+    SELECT org.sustainchain.network.Certification
+      WHERE (certType == _$certType)
+}
