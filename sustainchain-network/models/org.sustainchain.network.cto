@@ -17,15 +17,13 @@ namespace org.sustainchain.network
 /*
 * Sustainability ledger network
 */
-participant Organization identified by organizationId {
-  o String organizationId
+participant Organization identified by organizationName {
   o String organizationName
   o Location location
   o SectorType sector
 }
 
-participant Approver identified by approverId {
-  o String approverId
+participant Approver identified by approverName {
   o String approverName
   o Integer yearsExperience
   o Skill[] approverSkills
@@ -35,29 +33,31 @@ participant Approver identified by approverId {
 asset ApprovableRequest identified by requestId {
   o String requestId
   --> Organization requestingOrg
-  --> Approvable requestData
+  --> Certification certificate
+  --> SustainMetrics sustainmetrics
   o DateTime requestTime
 }
 
-asset Certification extends Approvable{
+asset Certification identified by certificateId{
+  o String certificateId
+  o Organization owner optional
+  o Approver approver optional
   o CertificationType certType
+  o DateTime approveTime optional
   --> SustainMetrics applicationData
 }
 
-asset SustainMetrics extends Approvable{
+asset SustainMetrics identified by sustainMetricsId{
+  o String sustainMetricsId
+  o Organization owner optional
+  o Approver approver optional
   o Double energyPerRevenue
+  o DateTime approveTime optional
   o EnergyMix energyMix
 }
 
-abstract asset Approvable identified by approvableId{
-  o String approvableId
-  --> Approver approver
-  --> Organization owner
-  o DateTime approveTime
-}
 
 transaction SubmitRequest {
-  --> Approver requestApprover
   --> Organization requestingOrg
   o Double energyPerRevenue
   o EnergyMix energyMix
@@ -66,8 +66,13 @@ transaction SubmitRequest {
 }
 
 transaction ApproveRequest {
-  --> Approvable requestData
+  --> ApprovableRequest approvableRequest
   --> Organization owner
+  o Approver approver
+}
+
+transaction BuildDemo{
+
 }
 
 /*
@@ -104,7 +109,7 @@ enum Skill {
 
 enum CertificationType {
   o LEED
-  o Energy Star
+  o EnergyStar
   o Fair_Trade_USA
   o Green_Seal
   o Forest_Stewardship_Council
