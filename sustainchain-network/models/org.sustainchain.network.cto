@@ -17,15 +17,13 @@ namespace org.sustainchain.network
 /*
 * Sustainability ledger network
 */
-participant Organization identified by organizationId {
-  o String organizationId
+participant Organization identified by organizationName {
   o String organizationName
   o Location location
   o SectorType sector
 }
 
-participant Approver identified by approverId {
-  o String approverId
+participant Approver identified by approverName {
   o String approverName
   o Integer yearsExperience
   o Skill[] approverSkills
@@ -69,6 +67,10 @@ transaction ApproveRequest {
   --> ApprovableRequest approvableRequest
   --> Organization owner
   o Approver approver
+}
+
+transaction buildDemo{
+
 }
 
 /*
