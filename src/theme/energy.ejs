@@ -36,8 +36,9 @@
 						<li><a href="#">Materials and Resources</a></li>
 					</ul>
 				</div>
-				<div class="app__main">
+				<div class="app__main one">
 					<div class="text-container">
+        <div class="graphone">
             <h3 class="app__main__title center">Energy Usage by Company</h3>
               <select id=company>
                 <!-- change company names here --> 
@@ -45,6 +46,17 @@
                 <option value="Banzo">Banzo</option>
                 <option value="Ian">Ian's Pizza</option>
               </select>
+        </div>
+        <div class="graphtwo">
+          <h3 class="app__main__title center">Energy Usage by Type</h3>
+              <select id=energy>
+                <option value="SolarMix">Solar Power</option>
+                <option value="WindMix">Wind Power</option>
+                <option value="CoalMix">Coal Power</option>
+                <option value="GasMix">Natural Gas</option>
+                <option value="OtherMix">Other</option>
+              </select>
+        </div>
 					</div>
 				</div>
 			</div>
@@ -53,7 +65,7 @@
 
 <script src='<%= asset("js/app.min.js") %>'></script>
 <script type="text/javascript">
-var svg = dimple.newSvg(".app__main", 590, 400);
+var svg = dimple.newSvg(".graphone", 590, 400);
 var thing;
 var betterTest = [
   {"ApprovableId": 
@@ -146,13 +158,27 @@ var betterTest = [
       OtherMix: 30,
     }
   }];
-var test;
-var result;
+
+  // One data point per line
+var result = [];
+var energyTypes = ["WindMix", "SolarMix", "GasMix", "CoalMix", "OtherMix"];
+for (var i = 0; i < betterTest.length; i++) {
+        console.log(betterTest[i]);
+        for (var k = 0; k < energyTypes.length; k++) {
+        result.push({
+        owner: betterTest[i]["ApprovableId"]["owner"],
+        approveTime: betterTest[i]["approveTime"],
+        energyType: energyTypes[k],
+        percentage: betterTest[i]["energyMix"][energyTypes[k]]
+        });
+        }
+        }
+        var test;
 var myChart;
 d3.json("/example_data", function (data) {
   thing = data;
 
-d3.select("select")
+d3.select("#company")
   .on("change",function(d){
     var selected = d3.select("#company").node().value;
     useData = dimple.filterData(result, "owner", selected)
@@ -163,22 +189,8 @@ d3.select("select")
 
   var cumsum = [];
   var total = 0;
-  result = [];
   var tp; // timepoint
-  var energyTypes = ["WindMix", "SolarMix", "GasMix", "CoalMix", "OtherMix"];
 
-  // One data point per line
-  for (var i = 0; i < betterTest.length; i++) {
-    console.log(betterTest[i]);
-    for (var k = 0; k < energyTypes.length; k++) {
-      result.push({
-        owner: betterTest[i]["ApprovableId"]["owner"],
-        approveTime: betterTest[i]["approveTime"],
-        energyType: energyTypes[k],
-        percentage: betterTest[i]["energyMix"][energyTypes[k]]
-      });
-    }
-  }
 
   myChart = new dimple.chart(svg, result);
   myChart.setBounds(60, 30, 505, 305);
@@ -189,6 +201,29 @@ d3.select("select")
   myChart.addLegend(60, 10, 500, 20, "right");
   myChart.draw();
 });
+
+        var byEnergyChart;
+var svg2 = dimple.newSvg(".graphtwo", 590, 400);
+        d3.json("/example_data", function(data){
+        thing = data;
+
+d3.select("#energy")
+  .on("change",function(d){
+    var selected = d3.select("#energy").node().value;
+    useData = dimple.filterData(result, "energyType", selected)
+    byEnergyChart.data = useData
+    byEnergyChart.draw(1000);
+  })
+        useData = dimple.filterData(result, "energyType", "WindMix")
+        byEnergyChart = new dimple.chart(svg2, useData);
+        byEnergyChart.setBounds(60, 30, 505, 305);
+        var x = byEnergyChart.addCategoryAxis("x", "approveTime");
+        byEnergyChart.addMeasureAxis("y", "percentage");
+        var s = byEnergyChart.addSeries("owner", dimple.plot.line);
+  byEnergyChart.addLegend(60, 10, 500, 20, "right");
+        byEnergyChart.draw();
+        }
+        )
 </script>
 </body>
 </html>
