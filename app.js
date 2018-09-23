@@ -56,4 +56,4 @@ app.get('/example_data',  (req,res) => res.json(obj)); // data
 
 
 
-app.listen(3000, () => console.log('Evie app listening on port 3000')); // Initialize the express server
+app.listen(3005, () => console.log('Evie app listening on port 3000')); // Initialize the express server
