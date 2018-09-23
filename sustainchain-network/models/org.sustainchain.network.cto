@@ -32,6 +32,13 @@ participant Approver identified by approverId {
   o CertificationType[] availableCerts
 }
 
+asset ApproveRequest identified by requestId {
+  o String requestId
+  --> Organization requestingOrg
+  --> Approver requestedApprover
+  o DateTime requestTime
+}
+
 asset Certification extends Approvable{
   o CertificationType certType
   --> SustainMetrics applicationData
