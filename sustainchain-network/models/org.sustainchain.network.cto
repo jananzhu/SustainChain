@@ -59,14 +59,16 @@ abstract asset Approvable identified by approvableId{
 transaction SubmitRequest {
   --> Approver requestApprover
   --> Organization requestingOrg
-  --> Approvable requestData
+  o Double energyPerRevenue
+  o EnergyMix energyMix
+  //Optional certification type if organization wants to apply
+  o CertificationType certType
 }
 
 transaction ApproveRequest {
   --> Approvable requestData
   --> Organization owner
 }
-
 
 /*
 * Should add up to 1
