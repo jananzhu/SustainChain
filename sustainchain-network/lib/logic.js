@@ -42,17 +42,17 @@ async function submitRequest(submitrequest) {
     console.log('sustainmetrics');
 
     return getAssetRegistry(NS+'.Certification')
-    .then(function(certificationRegistry){
-        return certificationRegistry.add(certificate);
-    }).then(function(){
-        return getAssetRegistry(NS+'.SustainMetrics');
-    }).then(function(sustainMetricsRegistry){
-        return sustainMetricsRegistry.add(sustainmetrics);
-    }).then(function(){
-        return getAssetRegistry(NS+'.ApprovableRequest');
-    }).then(function(approvableRequestRegistry){
-        return approvableRequestRegistry.add(approvableRequest);
-    });
+        .then(function(certificationRegistry){
+            return certificationRegistry.add(certificate);
+        }).then(function(){
+            return getAssetRegistry(NS+'.SustainMetrics');
+        }).then(function(sustainMetricsRegistry){
+            return sustainMetricsRegistry.add(sustainmetrics);
+        }).then(function(){
+            return getAssetRegistry(NS+'.ApprovableRequest');
+        }).then(function(approvableRequestRegistry){
+            return approvableRequestRegistry.add(approvableRequest);
+        });
 }
 
 //Transaction for approve request
@@ -68,19 +68,19 @@ async function approveRequest(approverequest) {
     var NS = 'org.sustainchain.network';
 
     return getAssetRegistry(NS+'.Certification')
-    .then(function(certificationRegistry){
-        var certificate = approverequest.approvableRequest.certificate;
-        certificate.owner = approverequest.owner;
-        certificate.approver = approverequest.approver;
-        return certificationRegistry.update(certificate);
-    }).then(function(){
-        return getAssetRegistry(NS+'.SustainMetrics');
-    }).then(function(sustainMetricsRegistry){
-        var sustainmetrics = approverequest.approvableRequest.sustainmetrics;
-        sustainmetrics.owner = approverequest.owner;
-        sustainmetrics.approver = approverequest.approver;
-        return sustainMetricsRegistry.update(sustainmetrics);
-    });
+        .then(function(certificationRegistry){
+            var certificate = approverequest.approvableRequest.certificate;
+            certificate.owner = approverequest.owner;
+            certificate.approver = approverequest.approver;
+            return certificationRegistry.update(certificate);
+        }).then(function(){
+            return getAssetRegistry(NS+'.SustainMetrics');
+        }).then(function(sustainMetricsRegistry){
+            var sustainmetrics = approverequest.approvableRequest.sustainmetrics;
+            sustainmetrics.owner = approverequest.owner;
+            sustainmetrics.approver = approverequest.approver;
+            return sustainMetricsRegistry.update(sustainmetrics);
+        });
 }
 
 //Transaction to build demo - initialize organizations and approvers
