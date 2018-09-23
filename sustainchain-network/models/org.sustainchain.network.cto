@@ -32,10 +32,11 @@ participant Approver identified by approverId {
   o CertificationType[] availableCerts
 }
 
-asset ApproveRequest identified by requestId {
+asset ApprovableRequest identified by requestId {
   o String requestId
   --> Organization requestingOrg
   --> Approver requestedApprover
+  --> Approvable requestData
   o DateTime requestTime
 }
 
@@ -47,6 +48,16 @@ asset Certification extends Approvable{
 asset SustainMetrics extends Approvable{
   o Double energyPerRevenue
   o EnergyMix energyMix
+}
+
+transaction SubmitRequest {
+  --> Approver requestApprover
+  --> Approvable requestData
+}
+
+transaction ApproveRequest {
+  --> Approvable requestData
+  --> Organization owner
 }
 
 abstract asset Approvable identified by approvableId{
