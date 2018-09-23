@@ -52,3 +52,29 @@ async function submitRequest(submitrequest) {
             return approvableRequestRegistry.add([approvableRequest]);
         });
 }
+
+//Transaction to build demo - initialize organizations and approvers
+/**
+ * Track the trade of a commodity from one trader to another
+ * @param {org.sustainchain.network.BuildDemo} submitrequest - the trade to be processed
+ * @transaction
+ */
+async function buildDemo() {
+
+    var factory = getFactory();
+    var NS = 'org.sustainchain.network';
+
+    var organization = factory.newResource(NS,'Organization','Epic');
+    var location = factory.newConcept(NS,'Location');
+    location.city = 'Verona';
+    location.state = 'Wisconsin';
+    location.country = 'USA';
+    organization.location = location;
+    organization.sector = 'Healthcare';
+
+    var approver = factory.newResource(NS,'Approver','LEED Expert');
+    approver.yearsExperience = 10;
+    approver.approverSkills = ['Energy_Assessments'];
+    approver.availableCerts = ['LEED', 'EnergyStar'];
+
+}

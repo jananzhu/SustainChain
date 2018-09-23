@@ -71,6 +71,10 @@ transaction ApproveRequest {
   --> Organization owner
 }
 
+transaction buildDemo{
+  
+}
+
 /*
 * Should add up to 1
 */
