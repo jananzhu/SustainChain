@@ -94,7 +94,7 @@ async function buildDemo() {
     var factory = getFactory();
     var NS = 'org.sustainchain.network';
 
-    var organization = factory.newResource(NS,'Organization','Epic');
+    var organization = factory.newResource(NS,'Organization','FakeEpic');
     var location = factory.newConcept(NS,'Location');
     location.city = 'Verona';
     location.state = 'Wisconsin';
@@ -107,4 +107,14 @@ async function buildDemo() {
     approver.approverSkills = ['Energy_Assessments'];
     approver.availableCerts = ['LEED', 'EnergyStar'];
 
+    return getParticipantRegistry(NS + '.Organization')
+        .then(function (organizationRegistry) {
+            return organizationRegistry.addAll([organization]);
+        })
+        .then(function(){
+            return getParticipantRegistry(NS + '.Approver');
+        })
+        .then(function(approverRegistry) {
+            return approverRegistry.addAll([approver]);
+        })
 }

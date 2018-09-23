@@ -40,8 +40,8 @@ asset ApprovableRequest identified by requestId {
 
 asset Certification identified by certificateId{
   o String certificateId
-  o Organization owner optional
-  o Approver approver optional
+  --> Organization owner optional
+  --> Approver approver optional
   o CertificationType certType
   o DateTime approveTime optional
   --> SustainMetrics applicationData
@@ -49,8 +49,8 @@ asset Certification identified by certificateId{
 
 asset SustainMetrics identified by sustainMetricsId{
   o String sustainMetricsId
-  o Organization owner optional
-  o Approver approver optional
+  --> Organization owner optional
+  --> Approver approver optional
   o Double energyPerRevenue
   o DateTime approveTime optional
   o EnergyMix energyMix
