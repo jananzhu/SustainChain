@@ -13,7 +13,6 @@
  */
 
 'use strict';
-
 //Transaction to apply for approve request
 /**
  * Track the trade of a commodity from one trader to another
@@ -22,25 +21,34 @@
  */
 async function submitRequest(submitrequest) {
     //update the asset
-    var CryptoJS = require('crypto-js');
     var time = new Date().getTime();
-    let newApprovableRequest = {requestId:CryptoJS.MD5(submitrequest.requestData.owner.organizationId+time
-    ), Organization: submitrequest.requestingOrg, Approvable: submitrequest.approvable, DateTime:time
-    };
-    let assetRegistry = await getAssetRegistry('org.sustainchain.network');
-    await assetRegistry.add(newApprovableRequest);
-}
+    var factory = getFactory();
+    var NS = 'org.sustainchain.network';
+    var sustainmetrics = factory.newResource(NS, 'SustainMetrics', submitrequest.timestamp+submitrequest.requestingOrg+'sustainmetrics');
+    sustainmetrics.owner = submitrequest.requestingOrg;
+    sustainmetrics.energyPerRevenue = submitrequest.energyPerRevenue;
+    sustainmetrics.energyMix = submitrequest.energyMix;
+    console.log('sustainmetrics');
 
-/**
- * Track the trade of a commodity from one trader to another
- * @param {org.sustainchain.network.ApproveRequest} approverequest - the trade to be processed
- * @transaction
- */
-async function approveRequest(approverequest) {
-    //update the asset
-    var CryptoJS = require('crypto-js');
-    var time = new Date().getTime();
-    approverequest.requestData.approveTime = time;
-    let assetRegistry = await getAssetRegistry('org.sustainchain.network.ApproveRequest');
-    await assetRegistry.update(approverequest);
+    var certificate = factory.newResource(NS, 'Certification', submitrequest.timestamp+submitrequest.requestingOrg+submitrequest.certType);
+    certificate.owner = submitrequest.requestingOrg;
+    certificate.certType = submitrequest.certType;
+    certificate.sustainmetrics = sustainmetrics;
+
+    var approvableRequest = factory.newResource(NS, 'ApprovableRequest', submitrequest.requestingOrg.organizationName+submitrequest.timestamp);
+    approvableRequest.requestingOrg = factory.newRelationship(NS, 'Organization', submitrequest.requestingOrg);
+    approvableRequest.certificate = certificate;
+
+    return getAssetRegistry(NS+'.Certification')
+        .then(function(certificationRegistry){
+            return certificationRegistry.add([certificate]);
+        }).then(function(){
+            return getAssetRegistry(NS+'.SustainMetrics');
+        }).then(function(sustainMetricsRegistry){
+            return sustainMetricsRegistry.add([sustainmetrics]);
+        }).then(function(){
+            return getAssetRegistry(NS+'.ApprovableRequest');
+        }).then(function(approvableRequestRegistry){
+            return approvableRequestRegistry.add([approvableRequest]);
+        });
 }
