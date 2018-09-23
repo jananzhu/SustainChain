@@ -69,7 +69,7 @@ transaction ApproveRequest {
   o Approver approver
 }
 
-transaction buildDemo{
+transaction BuildDemo{
 
 }
 
