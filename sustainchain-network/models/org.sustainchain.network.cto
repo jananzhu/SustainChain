@@ -12,31 +12,75 @@
  * limitations under the License.
  */
 
-/**
- * Write your model definitions here
- */
-
 namespace org.sustainchain.network
 
-participant SampleParticipant identified by participantId {
-  o String participantId
-  o String firstName
-  o String lastName
+/*
+* Sustainability ledger network
+*/
+participant Organization identified by organizationId {
+  o String organizationId
+  o String organizationName
+  o Location location
+  o SectorType sector
 }
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  --> SampleParticipant owner
-  o String value
+participant Approver identified by approverId {
+  o String approverId
+  o String approverName
+  o Integer yearsExperience
+  o Skill[] approverSkills
+  o CertificationType[] availableCerts
 }
 
-transaction SampleTransaction {
-  --> SampleAsset asset
-  o String newValue
+asset Certification extends Approvable{
+  o CertificationType certType
+  --> SustainMetrics applicationData
 }
 
-event SampleEvent {
-  --> SampleAsset asset
-  o String oldValue
-  o String newValue
+asset SustainMetrics extends Approvable{
+  o Double energyPerRevenue
+  o EnergyMix energyMix
+}
+
+abstract asset Approvable identified by approvableId{
+  o String approvableId
+  --> Approver approver
+  --> Organization owner
+  o DateTime approveTime
+}
+
+/*
+* Should add up to 1
+*/
+concept EnergyMix {
+  o Double WindMix
+  o Double SolarMix
+  o Double GasMix
+  o Double CoalMix
+  o Double OtherMix
+}
+
+concept Location {
+  o String city
+  o String state
+  o String country
+}
+
+//TODO: Fill out sectors here
+enum SectorType {
+  o SECTOR_ONE
+  o SECTOR_TWO
+  // etc...
+}
+
+//TODO: Fill out skills here
+enum Skill {
+  o SKILL_ONE
+  o SKILL_TWO
+  // etc..
+}
+
+//TODO: Fill out certifications
+enum CertificationType {
+
 }
