@@ -13,31 +13,34 @@
  */
 
 'use strict';
-/**
- * Write your transction processor functions here
- */
 
+//Transaction to apply for approve request
 /**
- * Sample transaction
- * @param {org.sustainchain.network.SampleTransaction} sampleTransaction
+ * Track the trade of a commodity from one trader to another
+ * @param {org.sustainchain.network.SubmitRequest} submitrequest - the trade to be processed
  * @transaction
  */
-async function sampleTransaction(tx) {
-    // Save the old value of the asset.
-    const oldValue = tx.asset.value;
+async function submitRequest(submitrequest) {
+    //update the asset
+    var CryptoJS = require('crypto-js');
+    var time = new Date().getTime();
+    let newApprovableRequest = {requestId:CryptoJS.MD5(submitrequest.requestData.owner.organizationId+time
+    ), Organization: submitrequest.requestingOrg, Approvable: submitrequest.approvable, DateTime:time
+    };
+    let assetRegistry = await getAssetRegistry('org.sustainchain.network');
+    await assetRegistry.add(newApprovableRequest);
+}
 
-    // Update the asset with the new value.
-    tx.asset.value = tx.newValue;
-
-    // Get the asset registry for the asset.
-    const assetRegistry = await getAssetRegistry('org.sustainchain.network.SampleAsset');
-    // Update the asset in the asset registry.
-    await assetRegistry.update(tx.asset);
-
-    // Emit an event for the modified asset.
-    let event = getFactory().newEvent('org.sustainchain.network', 'SampleEvent');
-    event.asset = tx.asset;
-    event.oldValue = oldValue;
-    event.newValue = tx.newValue;
-    emit(event);
+/**
+ * Track the trade of a commodity from one trader to another
+ * @param {org.sustainchain.network.ApproveRequest} approverequest - the trade to be processed
+ * @transaction
+ */
+async function approveRequest(approverequest) {
+    //update the asset
+    var CryptoJS = require('crypto-js');
+    var time = new Date().getTime();
+    approverequest.requestData.approveTime = time;
+    let assetRegistry = await getAssetRegistry('org.sustainchain.network.ApproveRequest');
+    await assetRegistry.update(approverequest);
 }

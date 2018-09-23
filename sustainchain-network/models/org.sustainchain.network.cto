@@ -12,31 +12,100 @@
  * limitations under the License.
  */
 
-/**
- * Write your model definitions here
- */
-
 namespace org.sustainchain.network
 
-participant SampleParticipant identified by participantId {
-  o String participantId
-  o String firstName
-  o String lastName
+/*
+* Sustainability ledger network
+*/
+participant Organization identified by organizationId {
+  o String organizationId
+  o String organizationName
+  o Location location
+  o SectorType sector
 }
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  --> SampleParticipant owner
-  o String value
+participant Approver identified by approverId {
+  o String approverId
+  o String approverName
+  o Integer yearsExperience
+  o Skill[] approverSkills
+  o CertificationType[] availableCerts
 }
 
-transaction SampleTransaction {
-  --> SampleAsset asset
-  o String newValue
+asset ApprovableRequest identified by requestId {
+  o String requestId
+  --> Organization requestingOrg
+  --> Approvable requestData
+  o DateTime requestTime
 }
 
-event SampleEvent {
-  --> SampleAsset asset
-  o String oldValue
-  o String newValue
+asset Certification extends Approvable{
+  o CertificationType certType
+  --> SustainMetrics applicationData
+}
+
+asset SustainMetrics extends Approvable{
+  o Double energyPerRevenue
+  o EnergyMix energyMix
+}
+
+abstract asset Approvable identified by approvableId{
+  o String approvableId
+  --> Approver approver
+  --> Organization owner
+  o DateTime approveTime
+}
+
+transaction SubmitRequest {
+  --> Approver requestApprover
+  --> Organization requestingOrg
+  o Double energyPerRevenue
+  o EnergyMix energyMix
+  //Optional certification type if organization wants to apply
+  o CertificationType certType
+}
+
+transaction ApproveRequest {
+  --> Approvable requestData
+  --> Organization owner
+}
+
+/*
+* Should add up to 1
+*/
+concept EnergyMix {
+  o Double WindMix
+  o Double SolarMix
+  o Double GasMix
+  o Double CoalMix
+  o Double OtherMix
+}
+
+concept Location {
+  o String city
+  o String state
+  o String country
+}
+
+enum SectorType {
+  o Transportation
+  o Healthcare
+  o Agriculture
+  o Technology
+  o Finance
+  o Insurance
+}
+
+enum Skill {
+  o Energy_Assessments
+  o Water_Use_Audits
+  o Waste_Audits
+}
+
+enum CertificationType {
+  o LEED
+  o Energy Star
+  o Fair_Trade_USA
+  o Green_Seal
+  o Forest_Stewardship_Council
 }
