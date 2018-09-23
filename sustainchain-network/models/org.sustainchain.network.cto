@@ -87,21 +87,25 @@ concept Location {
   o String country
 }
 
-//TODO: Fill out sectors here
 enum SectorType {
-  o SECTOR_ONE
-  o SECTOR_TWO
-  // etc...
+  o Transportation
+  o Healthcare
+  o Agriculture
+  o Technology
+  o Finance
+  o Insurance
 }
 
-//TODO: Fill out skills here
 enum Skill {
-  o SKILL_ONE
-  o SKILL_TWO
-  // etc..
+  o Energy_Assessments
+  o Water_Use_Audits
+  o Waste_Audits
 }
 
-//TODO: Fill out certifications
 enum CertificationType {
-
+  o LEED
+  o Energy Star
+  o Fair_Trade_USA
+  o Green_Seal
+  o Forest_Stewardship_Council
 }
