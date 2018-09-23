@@ -6,16 +6,24 @@ query selectCertifications {
     SELECT org.sustainchain.network.Certification
 }
 
-query selectCertificationsByOrganization{
+query selectCertificationsByOrganization {
   description: "Select all certifications for an organization"
   statement:
     SELECT org.sustainchain.network.Certification
       WHERE (owner == _$owner)
 }
 
-query selectCertificationsByType{
+query selectCertificationsByType {
   description: "Select all certifications based on their type"
   statement:
     SELECT org.sustainchain.network.Certification
       WHERE (certType == _$certType)
+}
+
+query selectMetricsByOrganization {
+  description: "See an organization's metrics"
+  statement: 
+    SELECT org.sustainchain.network.SustainMetrics
+      WHERE (owner == _$owner)
+        ORDER BY [approveTime DESC]
 }

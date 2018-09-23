@@ -43,6 +43,7 @@ asset Certification identified by certificateId{
   o Organization owner optional
   o Approver approver optional
   o CertificationType certType
+  o DateTime approveTime optional
   --> SustainMetrics applicationData
 }
 
@@ -51,6 +52,7 @@ asset SustainMetrics identified by sustainMetricsId{
   o Organization owner optional
   o Approver approver optional
   o Double energyPerRevenue
+  o DateTime approveTime optional
   o EnergyMix energyMix
 }
 

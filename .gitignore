@@ -74,3 +74,4 @@ typings/
 sustainchain-network/sustainchain-network@0.0.1.bna
 sustainchain-network/networkadmin.card
 .DS_Store
+.bna
