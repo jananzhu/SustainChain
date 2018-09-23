@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta class="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>SustainChain</title>
+	<link rel='stylesheet' href='<%= asset("css/style.min.css") %>' />
+  <script src="http://d3js.org/d3.v4.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.3.0.min.js"></script>
+</head>
+<body>
+	<!-- navbar -->
+	<div class="navbar">
+		<nav class="nav__mobile"></nav>
+		<div class="container">
+			<div class="navbar__inner">
+				<a href="#" class="navbar__logo">Logo</a>
+				<nav class="navbar__menu">
+					<ul>
+						<li><a href="#">Option</a></li>
+						<li><a href="#">Option 2</a></li>
+					</ul>
+				</nav>
+				<div class="navbar__menu-mob"><a href="" id='toggle'><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z" class=""></path></svg></a></div>
+			</div>
+		</div>
+	</div>
+	<!-- Page content -->
+	<div class="app">
+		<div class="container">
+			<div class="app__inner">
+				<div class="app__menu">
+					<ul class="vMenu">
+						<li><a href="#" class="vMenu--active">Energy</a></li>
+						<li><a href="#">Water</a></li>
+						<li><a href="#">Materials and Resources</a></li>
+					</ul>
+				</div>
+				<div class="app__main">
+					<div class="text-container">
+<script type="text/javascript">
+  var svg = dimple.newSvg(".app__main", 590, 400);
+var thing;
+var test;
+d3.json("/example_data", function (data) {
+  thing = data;
+  test = [
+    {"company": "Epic",
+      "times": [
+        {"approvalTime": 1, "wind": 10, "solar": 0, "gas": 30, "coal": 20, "other": 40},
+        {"approvalTime": 2, "wind": 15, "solar": 10, "gas": 25, "coal": 10, "other": 40},
+        {"approvalTime": 3, "wind": 20, "solar": 5, "gas": 20, "coal": 15, "other": 40}
+      ]
+    },
+    {"company": "Amfam",
+      "times": [
+        {"approvalTime": 1, "wind": 10, "solar": 0, "gas": 30, "coal": 20, "other": 40},
+        {"approvalTime": 2, "wind": 15, "solar": 10, "gas": 20, "coal": 10, "other": 45},
+        {"approvalTime": 3, "wind": 20, "solar": 5, "gas": 20, "coal": 15, "other": 40}
+      ]
+    }
+  ];
+
+  // For each company... for each time, make a new object time: 1, cumulative: [ 10, 10, 40 , 60, 100 ]
+
+  var cumsum = [];
+  var total = 0;
+  var result = [];
+  var tp; // timepoint
+  var energyTypes = ["wind", "solar", "gas", "coal", "other"];
+  for (var i = 0; i < test.length; i++) {
+    console.log(i)
+    for (var j = 0; j < test[i]["times"].length; j++) {
+      console.log(j)
+      // Save the timepoint as an object for easier access
+      tp = test[i]["times"][j]
+      // iterate over energy types and calculate cumulative
+      for (var k = 0; k < energyTypes.length; k++) {
+        total += tp[energyTypes[k]];
+        result.push({
+          company: test[i]["company"],
+          approvalTime: test[i]["times"][j],
+          cdfpoint: k,
+          cumsum: total
+        });
+      }
+      total = 0;
+    }
+  }
+  console.log(result)
+
+  // data = dimple.filterData(data, "Owner", ["Aperture", "Black Mesa"])
+  // var myChart = new dimple.chart(svg, data);
+  // myChart.setBounds(60, 30, 505, 305);
+  // var x = myChart.addCategoryAxis("x", "Month");
+  // x.addOrderRule("Date");
+  // myChart.addMeasureAxis("y", "Unit Sales");
+  // var s = myChart.addSeries("Channel", dimple.plot.area);
+  // myChart.addLegend(60, 10, 500, 20, "right");
+  // myChart.draw();
+});
+</script>
+            <h3 class="app__main__title">This is the main area</h3>
+            <p>Write or do whatever you want here!</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script src='<%= asset("js/app.min.js") %>'></script>
+</body>
+</html>

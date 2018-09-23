@@ -35,26 +35,27 @@ participant Approver identified by approverId {
 asset ApprovableRequest identified by requestId {
   o String requestId
   --> Organization requestingOrg
-  --> Approvable requestData
+  --> Certification certificate
+  --> SustainMetrics sustainmetrics
   o DateTime requestTime
 }
 
-asset Certification extends Approvable{
+asset Certification identified by certificateId{
+  o String certificateId
+  o Organization owner
+  o Approver approver
   o CertificationType certType
   --> SustainMetrics applicationData
 }
 
-asset SustainMetrics extends Approvable{
+asset SustainMetrics identified by sustainMetricsId{
+  o String sustainMetricsId
+  o Organization owner
+  o Approver approver
   o Double energyPerRevenue
   o EnergyMix energyMix
 }
 
-abstract asset Approvable identified by approvableId{
-  o String approvableId
-  --> Approver approver
-  --> Organization owner
-  o DateTime approveTime
-}
 
 transaction SubmitRequest {
   --> Approver requestApprover
@@ -66,7 +67,7 @@ transaction SubmitRequest {
 }
 
 transaction ApproveRequest {
-  --> Approvable requestData
+  --> ApprovableRequest request
   --> Organization owner
 }
 
@@ -104,7 +105,7 @@ enum Skill {
 
 enum CertificationType {
   o LEED
-  o Energy Star
+  o EnergyStar
   o Fair_Trade_USA
   o Green_Seal
   o Forest_Stewardship_Council
