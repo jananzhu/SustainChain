@@ -3,7 +3,7 @@
     "composer": "^0.20.1"
   },
   "name": "sustainchain-network",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "description": "Network for keeping a record of sustainability for organizations",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/sustainchain-network.bna",

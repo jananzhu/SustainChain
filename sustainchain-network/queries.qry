@@ -1,5 +1,11 @@
 /** Queries for sustainability ledger business network
 */
+query selectOrganizations {
+  description: "Select all organizations"
+  statement:
+    SELECT org.sustainchain.network.Organization
+}
+
 query selectCertifications {
   description: "Select all cerifications"
   statement:
