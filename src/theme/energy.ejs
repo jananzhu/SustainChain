@@ -14,11 +14,11 @@
 		<nav class="nav__mobile"></nav>
 		<div class="container">
 			<div class="navbar__inner">
-				<a href="#" class="navbar__logo">Logo</a>
+				<a href="/" class="navbar__logo">Logo</a>
 				<nav class="navbar__menu">
 					<ul>
-						<li><a href="#">Option</a></li>
-						<li><a href="#">Option 2</a></li>
+						<li><a href="/energy">Dashboard</a></li>
+						<li><a href="/page">For Businesses</a></li>
 					</ul>
 				</nav>
 				<div class="navbar__menu-mob"><a href="" id='toggle'><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z" class=""></path></svg></a></div>
@@ -36,72 +36,27 @@
 						<li><a href="#">Materials and Resources</a></li>
 					</ul>
 				</div>
-				<div class="app__main">
+				<div class="app__main one">
 					<div class="text-container">
-<script type="text/javascript">
-  var svg = dimple.newSvg(".app__main", 590, 400);
-var thing;
-var test;
-d3.json("/example_data", function (data) {
-  thing = data;
-  test = [
-    {"company": "Epic",
-      "times": [
-        {"approvalTime": 1, "wind": 10, "solar": 0, "gas": 30, "coal": 20, "other": 40},
-        {"approvalTime": 2, "wind": 15, "solar": 10, "gas": 25, "coal": 10, "other": 40},
-        {"approvalTime": 3, "wind": 20, "solar": 5, "gas": 20, "coal": 15, "other": 40}
-      ]
-    },
-    {"company": "Amfam",
-      "times": [
-        {"approvalTime": 1, "wind": 10, "solar": 0, "gas": 30, "coal": 20, "other": 40},
-        {"approvalTime": 2, "wind": 15, "solar": 10, "gas": 20, "coal": 10, "other": 45},
-        {"approvalTime": 3, "wind": 20, "solar": 5, "gas": 20, "coal": 15, "other": 40}
-      ]
-    }
-  ];
-
-  // For each company... for each time, make a new object time: 1, cumulative: [ 10, 10, 40 , 60, 100 ]
-
-  var cumsum = [];
-  var total = 0;
-  var result = [];
-  var tp; // timepoint
-  var energyTypes = ["wind", "solar", "gas", "coal", "other"];
-  for (var i = 0; i < test.length; i++) {
-    console.log(i)
-    for (var j = 0; j < test[i]["times"].length; j++) {
-      console.log(j)
-      // Save the timepoint as an object for easier access
-      tp = test[i]["times"][j]
-      // iterate over energy types and calculate cumulative
-      for (var k = 0; k < energyTypes.length; k++) {
-        total += tp[energyTypes[k]];
-        result.push({
-          company: test[i]["company"],
-          approvalTime: test[i]["times"][j],
-          cdfpoint: k,
-          cumsum: total
-        });
-      }
-      total = 0;
-    }
-  }
-  console.log(result)
-
-  // data = dimple.filterData(data, "Owner", ["Aperture", "Black Mesa"])
-  // var myChart = new dimple.chart(svg, data);
-  // myChart.setBounds(60, 30, 505, 305);
-  // var x = myChart.addCategoryAxis("x", "Month");
-  // x.addOrderRule("Date");
-  // myChart.addMeasureAxis("y", "Unit Sales");
-  // var s = myChart.addSeries("Channel", dimple.plot.area);
-  // myChart.addLegend(60, 10, 500, 20, "right");
-  // myChart.draw();
-});
-</script>
-            <h3 class="app__main__title">This is the main area</h3>
-            <p>Write or do whatever you want here!</p>
+        <div class="graphone">
+            <h3 class="app__main__title center">Energy Usage by Company</h3>
+              <select id=company>
+                <!-- change company names here --> 
+                <option value="Amigos">Amigos</option>
+                <option value="Banzo">Banzo</option>
+                <option value="Ian">Ian's Pizza</option>
+              </select>
+        </div>
+        <div class="graphtwo">
+          <h3 class="app__main__title center">Energy Usage by Type</h3>
+              <select id=energy>
+                <option value="SolarMix">Solar Power</option>
+                <option value="WindMix">Wind Power</option>
+                <option value="CoalMix">Coal Power</option>
+                <option value="GasMix">Natural Gas</option>
+                <option value="OtherMix">Other</option>
+              </select>
+        </div>
 					</div>
 				</div>
 			</div>
@@ -109,5 +64,166 @@ d3.json("/example_data", function (data) {
 	</div>
 
 <script src='<%= asset("js/app.min.js") %>'></script>
+<script type="text/javascript">
+var svg = dimple.newSvg(".graphone", 590, 400);
+var thing;
+var betterTest = [
+  {"ApprovableId": 
+    {
+      approver: "XXX",
+      owner: "Amigos"
+    },
+    "approveTime": 1,
+    "energyMix" : 
+    {
+      "WindMix": 10,
+      "SolarMix": 0,
+      "GasMix": 30,
+      "CoalMix": 20,
+      "OtherMix": 40
+    }
+  },
+  {"ApprovableId": 
+    {
+      approver: "XXX",
+      owner: "Amigos"
+    },
+    approveTime: 2,
+    energyMix : 
+    {
+      WindMix: 20,
+      SolarMix: 0,
+      GasMix: 20,
+      CoalMix: 20,
+      OtherMix: 40,
+    }
+  },
+  {"ApprovableId": 
+    {
+      approver: "XXX",
+      owner: "Amigos"
+    },
+    approveTime: 3,
+    energyMix : 
+    {
+      WindMix: 10,
+      SolarMix: 0,
+      GasMix: 30,
+      CoalMix: 30,
+      OtherMix: 30,
+    }
+  },
+  {"ApprovableId": 
+    {
+      approver: "XXX",
+      owner: "Banzo"
+    },
+    "approveTime": 1,
+    "energyMix" : 
+    {
+      "WindMix": 40,
+      "SolarMix": 10,
+      "GasMix": 20,
+      "CoalMix": 10,
+      "OtherMix": 20,
+    }
+  },
+  {"ApprovableId": 
+    {
+      approver: "XXX",
+      owner: "Banzo"
+    },
+    approveTime: 2,
+    energyMix : 
+    {
+      WindMix: 20,
+      SolarMix: 0,
+      GasMix: 20,
+      CoalMix: 20,
+      OtherMix: 40,
+    }
+  },
+  {"ApprovableId": 
+    {
+      approver: "XXX",
+      owner: "Banzo"
+    },
+    approveTime: 3,
+    energyMix : 
+    {
+      WindMix: 10,
+      SolarMix: 0,
+      GasMix: 30,
+      CoalMix: 30,
+      OtherMix: 30,
+    }
+  }];
+
+  // One data point per line
+var result = [];
+var energyTypes = ["WindMix", "SolarMix", "GasMix", "CoalMix", "OtherMix"];
+for (var i = 0; i < betterTest.length; i++) {
+        console.log(betterTest[i]);
+        for (var k = 0; k < energyTypes.length; k++) {
+        result.push({
+        owner: betterTest[i]["ApprovableId"]["owner"],
+        approveTime: betterTest[i]["approveTime"],
+        energyType: energyTypes[k],
+        percentage: betterTest[i]["energyMix"][energyTypes[k]]
+        });
+        }
+        }
+        var test;
+var myChart;
+d3.json("/example_data", function (data) {
+  thing = data;
+
+d3.select("#company")
+  .on("change",function(d){
+    var selected = d3.select("#company").node().value;
+    useData = dimple.filterData(result, "owner", selected)
+    myChart.data = useData
+    myChart.draw(1000);
+  })
+
+
+  var cumsum = [];
+  var total = 0;
+  var tp; // timepoint
+
+
+  myChart = new dimple.chart(svg, result);
+  myChart.setBounds(60, 30, 505, 305);
+  var x = myChart.addCategoryAxis("x", "approveTime");
+  x.addOrderRule("approveTime");
+  myChart.addMeasureAxis("y", "percentage");
+  var s = myChart.addSeries("energyType", dimple.plot.area);
+  myChart.addLegend(60, 10, 500, 20, "right");
+  myChart.draw();
+});
+
+        var byEnergyChart;
+var svg2 = dimple.newSvg(".graphtwo", 590, 400);
+        d3.json("/example_data", function(data){
+        thing = data;
+
+d3.select("#energy")
+  .on("change",function(d){
+    var selected = d3.select("#energy").node().value;
+    useData = dimple.filterData(result, "energyType", selected)
+    byEnergyChart.data = useData
+    byEnergyChart.draw(1000);
+  })
+        useData = dimple.filterData(result, "energyType", "WindMix")
+        byEnergyChart = new dimple.chart(svg2, useData);
+        byEnergyChart.setBounds(60, 30, 505, 305);
+        var x = byEnergyChart.addCategoryAxis("x", "approveTime");
+        byEnergyChart.addMeasureAxis("y", "percentage");
+        var s = byEnergyChart.addSeries("owner", dimple.plot.line);
+  byEnergyChart.addLegend(60, 10, 500, 20, "right");
+        byEnergyChart.draw();
+        }
+        )
+</script>
 </body>
 </html>
