@@ -13,7 +13,7 @@
  */
 
 'use strict';
-//Transaction to apply for approve request
+//Transaction for submit request
 /**
  * Track the trade of a commodity from one trader to another
  * @param {org.sustainchain.network.SubmitRequest} submitrequest - the trade to be processed
@@ -25,30 +25,60 @@ async function submitRequest(submitrequest) {
     var factory = getFactory();
     var NS = 'org.sustainchain.network';
     var sustainmetrics = factory.newResource(NS, 'SustainMetrics', submitrequest.timestamp+submitrequest.requestingOrg+'sustainmetrics');
-    sustainmetrics.owner = submitrequest.requestingOrg;
     sustainmetrics.energyPerRevenue = submitrequest.energyPerRevenue;
     sustainmetrics.energyMix = submitrequest.energyMix;
     console.log('sustainmetrics');
 
     var certificate = factory.newResource(NS, 'Certification', submitrequest.timestamp+submitrequest.requestingOrg+submitrequest.certType);
-    certificate.owner = submitrequest.requestingOrg;
     certificate.certType = submitrequest.certType;
-    certificate.sustainmetrics = sustainmetrics;
+    certificate.applicationData = sustainmetrics;
+    console.log('sustainmetrics');
 
     var approvableRequest = factory.newResource(NS, 'ApprovableRequest', submitrequest.requestingOrg.organizationName+submitrequest.timestamp);
     approvableRequest.requestingOrg = factory.newRelationship(NS, 'Organization', submitrequest.requestingOrg);
     approvableRequest.certificate = certificate;
+    approvableRequest.sustainmetrics = sustainmetrics;
+    approvableRequest.requestTime = submitrequest.timestamp;
+    console.log('sustainmetrics');
 
     return getAssetRegistry(NS+'.Certification')
-        .then(function(certificationRegistry){
-            return certificationRegistry.add([certificate]);
-        }).then(function(){
-            return getAssetRegistry(NS+'.SustainMetrics');
-        }).then(function(sustainMetricsRegistry){
-            return sustainMetricsRegistry.add([sustainmetrics]);
-        }).then(function(){
-            return getAssetRegistry(NS+'.ApprovableRequest');
-        }).then(function(approvableRequestRegistry){
-            return approvableRequestRegistry.add([approvableRequest]);
-        });
+    .then(function(certificationRegistry){
+        return certificationRegistry.add(certificate);
+    }).then(function(){
+        return getAssetRegistry(NS+'.SustainMetrics');
+    }).then(function(sustainMetricsRegistry){
+        return sustainMetricsRegistry.add(sustainmetrics);
+    }).then(function(){
+        return getAssetRegistry(NS+'.ApprovableRequest');
+    }).then(function(approvableRequestRegistry){
+        return approvableRequestRegistry.add(approvableRequest);
+    });
+}
+
+//Transaction for approve request
+/**
+ * Track the trade of a commodity from one trader to another
+ * @param {org.sustainchain.network.ApproveRequest} approverequest - the trade to be processed
+ * @transaction
+ */
+async function approveRequest(approverequest) {
+    //update the asset
+    var time = new Date().getTime();
+    var factory = getFactory();
+    var NS = 'org.sustainchain.network';
+
+    return getAssetRegistry(NS+'.Certification')
+    .then(function(certificationRegistry){
+        var certificate = approverequest.approvableRequest.certificate;
+        certificate.owner = approverequest.owner;
+        certificate.approver = approverequest.approver;
+        return certificationRegistry.update(certificate);
+    }).then(function(){
+        return getAssetRegistry(NS+'.SustainMetrics');
+    }).then(function(sustainMetricsRegistry){
+        var sustainmetrics = approverequest.approvableRequest.sustainmetrics;
+        sustainmetrics.owner = approverequest.owner;
+        sustainmetrics.approver = approverequest.approver;
+        return sustainMetricsRegistry.update(sustainmetrics);
+    });
 }

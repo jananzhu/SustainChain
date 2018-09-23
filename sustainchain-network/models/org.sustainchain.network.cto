@@ -42,23 +42,22 @@ asset ApprovableRequest identified by requestId {
 
 asset Certification identified by certificateId{
   o String certificateId
-  o Organization owner
-  o Approver approver
+  o Organization owner optional
+  o Approver approver optional
   o CertificationType certType
   --> SustainMetrics applicationData
 }
 
 asset SustainMetrics identified by sustainMetricsId{
   o String sustainMetricsId
-  o Organization owner
-  o Approver approver
+  o Organization owner optional
+  o Approver approver optional
   o Double energyPerRevenue
   o EnergyMix energyMix
 }
 
 
 transaction SubmitRequest {
-  --> Approver requestApprover
   --> Organization requestingOrg
   o Double energyPerRevenue
   o EnergyMix energyMix
@@ -67,8 +66,9 @@ transaction SubmitRequest {
 }
 
 transaction ApproveRequest {
-  --> ApprovableRequest request
+  --> ApprovableRequest approvableRequest
   --> Organization owner
+  o Approver approver
 }
 
 /*
